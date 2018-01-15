@@ -5,3 +5,27 @@ Exercise 2
 3. The DNS server's hostname is 'nameserver' and its IP address is '10.200.1.11'. This was obtained by looking at the /etc/resolv.conf file.
 4. The numbers in /etc/protocols denote the Protocol Numbers for different protocols as assigned by Internet Assigned Numbers Authority (IANA). They are used for multiplexing/demultiplexing between the transport and network layers.
 5.
+
+
+
+
+
+Exercise 3
+----------
+1.
+sudo tcpdump -w outnetwork #outnetwork is the filename
+
+Simultaneously running this in other terminal
+wget internet.iitb.ac.in
+
+Then opened sniffed result in Wireshark
+
+2.
+Transmission Control Protocol, Src Port: 43104, Dst Port:80, Seq: 0, Len: 0
+.
+.
+Windows size value: 29200
+Checksum: 0xea60 [unverified]
+
+Source 192.168.42.28
+Destination 10.102.1.11
