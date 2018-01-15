@@ -66,24 +66,27 @@ ping www.internet.iitb.ac.in # this generates both ICMP and arp
 
 ssh rupesh@mars.cse.iitb.ac.in # this generates SSH packets
 
-Q2 
-a) Ethernet II -> Address Resolution Protocol(request)
-Link layer 
-	Ethernet II 
+Q2
+a) The flow of this packet up the protocol stack is : Ethernet II -> Address Resolution Protocol(request)
 
-Network : Address Resolution Protocol(request)
-	Protocol type: IPv4 (0x0800)
-	Hardware type: Ethernet (1)
+The processes/protocols handling this packet are :
+In Link layer 
+    Ethernet II 
 
-b) Type: ARP (0x0806) in Ethernet Header
+In Network layer :
 
+    Address Resolution Protocol(request)
+    Protocol type: IPv4 (0x0800)
 
-Q3. ICMP protocol: 
-
-a) Ethernet II -> Internet Protocol Version 4 -> Internet Control Message Protocol
+b) Type: ARP (0x0806) in Ethernet Header #in decimals 2054
 
 
-Type: 8 (Echo (ping) request) There is no port associated with ICMP
+Q3. ICMP protocol:
+
+a) The flow of the packet is : Ethernet II -> Internet Protocol Version 4 -> Internet Control Message Protocol
+
+Processes handling this packet are :
+Type: 8 (Echo (ping) request) (There is no port associated with ICMP)
 
 b) Type: IPv4 (0x0800)   #in decimals 2048
 
@@ -95,6 +98,6 @@ Q4.
 Source- 192.168.42.28
 Destination- 10.129.3.5
 
- 
+
 
 Exercise 5
