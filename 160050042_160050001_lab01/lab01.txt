@@ -4,3 +4,29 @@ Exercise 2
 2. The next hop's IP address (or the _gateway address) was 10.196.0.2 and the MAC address was 00:04:96:83:a0:8e. Both of these were found by executing 'arp -a' command and looking against the _gateway field.
 3. The DNS server's hostname is 'nameserver' and its IP address is '10.200.1.11'. This was obtained by looking at the /etc/resolv.conf file.
 4. The numbers in /etc/protocols denote the 
+
+
+
+
+
+Exercise 3
+----------
+1.
+sudo tcpdump -w outnetwork #outnetwork is the filename
+
+Simultaneously running this in other terminal
+wget internet.iitb.ac.in
+
+Then opened sniffed result in Wireshark
+
+2.
+Transmission Control Protocol, Src Port: 43104, Dst Port:80, Seq: 0, Len: 0
+.
+.
+Windows size value: 29200
+Checksum: 0xea60 [unverified]
+
+Source 192.168.42.28
+Destination 10.102.1.11
+
+
