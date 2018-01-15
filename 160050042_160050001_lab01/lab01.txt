@@ -4,7 +4,7 @@ Exercise 2
 2. The next hop's IP address (or the _gateway address) was 10.196.0.2 and the MAC address was 00:04:96:83:a0:8e. Both of these were found by executing 'arp -a' command and looking against the _gateway field.
 3. The DNS server's hostname is 'nameserver' and its IP address is '10.200.1.11'. This was obtained by looking at the /etc/resolv.conf file.
 4. The numbers in /etc/protocols denote the Protocol Numbers for different protocols as assigned by Internet Assigned Numbers Authority (IANA). They are used for multiplexing/demultiplexing between the transport and network layers.
-5. This information is obtained from the /etc/services file. The required port numbers are: ssh - 22, ftp - 21, nfs - 2049 and smtp - 25. 
+5. This information is obtained from the /etc/services file. The required port numbers are: ssh - 22, ftp - 21, nfs - 2049 and smtp - 25.
 
 
 
@@ -30,17 +30,17 @@ Checksum: 0xea60 [unverified]
 Source 192.168.42.28
 Destination 10.102.1.11
 
-a) MAC fe:45:77:3c:34:1f 
-	It was determined by looking at the TCP packet captured unbulletder Ethernet II
+a) MAC fe:45:77:3c:34:1f
+	It was determined by looking at the TCP packet captured under bullet Ethernet II
 layer header (link layer detail).
   IP address of next layer 192.168.42.129
-	found through 
+	found through
 > traceroute iitb.ac.in
 
 b) Final destination 10.102.1.11
 	In the detail of Internet Protocol Version 4 HEADER (Transport layer). Destination bullet of the details in header
 
-We can't find MAC address of destination as we don't have packet of node after our system.  
+We can't find MAC address of destination as we don't have packets of nodes beyond our system.
 
 c) In Ethernet/Link layer there is a Type field which gives the information of the further layer to refer to.
 	Type: IPv4(0x0800)
