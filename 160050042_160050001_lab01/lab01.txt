@@ -43,7 +43,7 @@ b) Final destination 10.102.1.11
 We can't find MAC address of destination as we don't have packets of nodes beyond our system.
 
 c) In Ethernet/Link layer there is a Type field which gives the information of the further layer to refer to.
-	Type: IPv4(0x0800)
+	Type: IPv4(0x0800) #in decimals 2048
 In IPv4 layer,
 	Protocol: TCP (6)
 In TCP header,
