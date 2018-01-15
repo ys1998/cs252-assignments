@@ -29,3 +29,28 @@ Checksum: 0xea60 [unverified]
 
 Source 192.168.42.28
 Destination 10.102.1.11
+
+a) Destination IP 10.102.1.11
+   MAC fe:45:77:3c:34:1f 
+	It was determined by looking at the TCP packet captured
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Exercise 5
