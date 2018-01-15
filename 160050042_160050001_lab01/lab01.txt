@@ -3,4 +3,5 @@ Exercise 2
 1. Our machine's hostnames were 'arch' and 'R2D2'. We found them by executing the 'hostname' command. Our machine's IP addresses were '10.196.19.32' and '192.168.42.28'. We found them by executing the 'ifconfig' command and checking the 'inet' address field.
 2. The next hop's IP address (or the _gateway address) was 10.196.0.2 and the MAC address was 00:04:96:83:a0:8e. Both of these were found by executing 'arp -a' command and looking against the _gateway field.
 3. The DNS server's hostname is 'nameserver' and its IP address is '10.200.1.11'. This was obtained by looking at the /etc/resolv.conf file.
-4. The numbers in /etc/protocols denote the 
+4. The numbers in /etc/protocols denote the Protocol Numbers for different protocols as assigned by Internet Assigned Numbers Authority (IANA). They are used for multiplexing/demultiplexing between the transport and network layers.
+5.
