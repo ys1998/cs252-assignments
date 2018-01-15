@@ -30,20 +30,34 @@ Checksum: 0xea60 [unverified]
 Source 192.168.42.28
 Destination 10.102.1.11
 
-a) Destination IP 10.102.1.11
-   MAC fe:45:77:3c:34:1f 
-	It was determined by looking at the TCP packet captured
+a) MAC fe:45:77:3c:34:1f 
+	It was determined by looking at the TCP packet captured unbulletder Ethernet II
+layer header (link layer detail).
+  IP address of next layer 192.168.42.129
+	found through 
+> traceroute iitb.ac.in
+
+b) Final destination 10.102.1.11
+	In the detail of Internet Protocol Version 4 HEADER (Transport layer). Destination bullet of the details in header
+
+We can't find MAC address of destination as we don't have packet of node after our system.  
+
+c) In Ethernet/Link layer there is a Type field which gives the information of the further layer to refer to.
+	Type: IPv4(0x0800)
+In IPv4 layer,
+	Protocol: TCP (6)
+In TCP header,
+	Source Port: 43104
+	Destination Port: 80
+So at destination Port 80 is used
+
+3) exercise3.pcap is attached
 
 
 
 
-
-
-
-
-
-
-
+Exercise 4
+----------
 
 
 
