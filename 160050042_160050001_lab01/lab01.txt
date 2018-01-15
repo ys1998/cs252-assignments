@@ -59,12 +59,42 @@ So at destination Port 80 is used
 Exercise 4
 ----------
 
+sudo tcpdump -w second-task
+
+Simultaneously running this in other terminal
+ping www.internet.iitb.ac.in # this generates both ICMP and arp
+
+ssh rupesh@mars.cse.iitb.ac.in # this generates SSH packets
+
+Q2 
+a) Ethernet II -> Address Resolution Protocol(request)
+Link layer 
+	Ethernet II 
+
+Network : Address Resolution Protocol(request)
+	Protocol type: IPv4 (0x0800)
+	Hardware type: Ethernet (1)
+
+b) Type: ARP (0x0806) in Ethernet Header
 
 
+Q3. ICMP protocol: 
+
+a) Ethernet II -> Internet Protocol Version 4 -> Internet Control Message Protocol
 
 
+Type: 8 (Echo (ping) request) There is no port associated with ICMP
+
+b) Type: IPv4 (0x0800)   #in decimals 2048
+
+c) Protocol: ICMP (1)
 
 
+Q4.
+ a) Internet Protocol Version 4, Src: 192.168.42.28, Dst: 10.129.3.5
+Source- 192.168.42.28
+Destination- 10.129.3.5
 
+ 
 
 Exercise 5
