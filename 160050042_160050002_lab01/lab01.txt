@@ -101,24 +101,24 @@ b) Transmission Control Protocol, Src Port: 50352, Dst Port: 22, Seq: 1, Ack: 1,
 Source Port 50352
 Destination Port 22
 
-c) ssh server works on port number 22 using both tcp and udp as specified in the output of 
-$> cat /etc/services | grep "ssh"
+c) IP address:port -> 10.129.3.5:22
 
-ssh		22/tcp				# SSH Remote Login Protocol
-ssh		22/udp
- 
 
 
 
 Exercise 5
 ----------
-1) The HTTP request is sent at a moment from wget and in response of the request, 
-a MP4 containing HTTP is recieved by the system. 
-wget takes this difference as a measure of X, Y and Z
+1) Considering X -> total size in bits, Y -> data rate and Z -> delay:
+		HTTP header -> Content-Length = X
+		Difference in timestamps of request and response HTTP headers = Z
+		Y = X/Z
+Considering X -> timestamp, Y -> data rate, Z -> filename
+ 		X is the sytem's timestamp when the process finished
+		Y = content-length/delay (as discussed above)
+		Z = filename from the GET request field of HTTP header
 
 2) 11.2 MB/s which translates to 89.6 Mbps
 I am connected to a 100Mbps link
 
-3 and 4) 
-	For Ping, time is calculated as the difference in between ICMP request packet and ICMP reply packet.
-
+3 and 4)
+	For Ping, time is calculated as the difference in timestamps between ICMP request packet and ICMP reply packet.
