@@ -1,69 +1,54 @@
 import os
 import subprocess
 import matplotlib.pyplot as plt 
-import random
-import re
+import numpy as np
 
-PATH_TO_NS3 = '/home/rupesh/ns-3.27'
-SIMTIME = 2
+PATH_TO_NS3 = '/home/yash/Downloads/ns-3.27'
+SIMTIME = 10
 DATA_RATE = '10Mbps'
 
-NODES = list(range(1,16))
-#NODES.extend([n*n for n in range(4,12)])
+NODES = [1, 50]
 
 def main():
+
 	os.chdir(PATH_TO_NS3)
-
-	fraction_retries = []
-
+	inter_arrival = {}
+	total = {}
 	for n in NODES:
+		inter_arrival[n] = []
+		total[n] = 0
 		command = ["./waf", "--run", "nsta-udp --nodes={0} --simtime={1} --dataRate={2}".format(n,SIMTIME,DATA_RATE)]
 		subprocess.call(command)
-#		tp = running_sum/SIMTIME
-#		================================================================================
-		count1 = 0
-		"""
-		command2 = ["tshark", "-r", "Station-1-0.pcap", "-z", "conv,wlan,wlan.fc.retry==1",">temp1.txt"]
-		subprocess.call(command2)
-		"""
-		command1 = "tshark -r Station-1-0.pcap -z conv,wlan,wlan.fc.retry==1 >temp1.txt"
-		os.system(command1)
-		with open("temp1.txt") as f:
-			while(f.readline()[0]!="="):
-				pass
-			for i in range(4):
-				f.readline()
-			line = f.readline()
-			
-			while line[0] is not "=":
-				count1 += int(line.split()[7])
-				line = f.readline()
-
-		count0 = 0
-		command2 = "tshark -r Station-1-0.pcap -z conv,wlan,wlan.fc.retry==0 >temp0.txt"
+		
+		command2 = 'tshark -r AccessPoint-0-0.pcap -Y \"ip.src==10.0.0.2\" > temp.txt'
 		os.system(command2)
-		with open("temp0.txt") as f:
-			while(f.readline()[0]!="="):
-				pass
-			for i in range(4):
-				f.readline()
-			line = f.readline()
-			
-			while line[0] is not "=":
-				count0 += int(line.split()[7])
-				line = f.readline()
 
-		fraction_retries.append(count1*100/(count1+count0))
+		with open("temp.txt") as f:
+			total[n] += 1
+			t_prev = float(f.readline().split()[1])
+			for line in f:
+				total[n] += 1
+				t_now = float(line.split()[1])
+				inter_arrival[n].append(t_now-t_prev)
+				t_prev = t_now
 
 	# Plotting routine
-	plt.figure(1)
-	plt.xlabel("Number of nodes")
-	plt.ylabel("Percentage of retries")
-	plt.title("retry-numnodes")
-	plt.plot(NODES,fraction_retries)
-	plt.show()
+	y1,binEdges1=np.histogram(inter_arrival[1])
+	bincenters1 = 0.5*(binEdges1[1:]+binEdges1[:-1])
 
+	y50,binEdges50=np.histogram(inter_arrival[50])
+	bincenters50 = 0.5*(binEdges50[1:]+binEdges50[:-1])
 
+	y100,binEdges100=np.histogram(inter_arrival[100])
+	bincenters100 = 0.5*(binEdges100[1:]+binEdges100[:-1])
+
+	plt.xlabel("Time interval")
+	plt.ylabel("Probability")
+	plt.title("inter-arrival")
+	plt.plot(bincenters1, y1/(total[1]-1))
+	plt.plot(bincenters50, y50/(total[50]-1))
+	plt.plot(bincenters100, y100/total[100]-1)
+	plt.savefig('inter-arrival.pdf')
 
 if __name__ == '__main__':
 	main()
