@@ -7,7 +7,7 @@ PATH_TO_NS3 = '/home/yash/Downloads/ns-3.27'
 SIMTIME = 10
 DATA_RATE = '10Mbps'
 
-NODES = [1, 50]
+NODES = [1, 50, 100]
 
 def main():
 
@@ -47,7 +47,7 @@ def main():
 	plt.title("inter-arrival")
 	plt.plot(bincenters1, y1/(total[1]-1))
 	plt.plot(bincenters50, y50/(total[50]-1))
-	plt.plot(bincenters100, y100/total[100]-1)
+	plt.plot(bincenters100, y100/(total[100]-1))
 	plt.savefig('inter-arrival.pdf')
 
 if __name__ == '__main__':
