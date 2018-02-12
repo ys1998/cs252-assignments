@@ -69,3 +69,9 @@ In a mid value, the graph had some high values too with low probability, but mai
 In largest value, There was a relatively larger spread in the inter-arrival time and the peak was the at largest time innterval among all 3 also the maximum value attend was pretty high.
 
 
+blue == 1
+
+orange == 50
+
+green == 100
+
