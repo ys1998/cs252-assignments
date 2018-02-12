@@ -8,7 +8,7 @@ SIMTIME = 10
 DATA_RATE = '10Mbps'
 
 NODES = list(range(1,16))
-NODES.extend([n*n for n in range(4,12)])
+NODES.extend([n*n for n in range(4,11)])
 
 def main():
 	os.chdir(PATH_TO_NS3)
@@ -45,21 +45,24 @@ def main():
 	plt.ylabel("Total throughput (Mbps)")
 	plt.title("throughput-numnodes")
 	plt.plot(NODES,throughput_values)
-	plt.show()
+	# plt.show()
+	plt.savefig('throughput-numnodes.pdf')
 
 	plt.figure(2)
 	plt.xlabel("Number of nodes")
 	plt.ylabel("Jain Fairness")
 	plt.title("fairness-1sec-numnodes")
 	plt.plot(NODES,jain_fairness_1)
-	plt.show()
+	# plt.show()
+	plt.savefig('fairness-1sec-numnodes.pdf')
 
 	plt.figure(3)
 	plt.xlabel("Number of nodes")
 	plt.ylabel("Jain Fairness")
 	plt.title("fairness-10sec-numnodes")
 	plt.plot(NODES,jain_fairness_10)
-	plt.show()
+	# plt.show()
+	plt.savefig('fairness-10sec-numnodes.pdf')
 
 if __name__ == '__main__':
 	main()
