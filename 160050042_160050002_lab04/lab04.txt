@@ -1,55 +1,13 @@
-﻿Lab 2 [Roll no. 160050042, 160050002]
+﻿Lab 4 [Roll no. 160050042, 160050002]
 -------------------------------------
 
 Exercise 1
 --------------
-FOR REMOTE TRACE :
-1. 10.129.5.166
-2. HTTP
-3. a) 2.50915s b) 2.776671s    c) 2.776697s  
-4. Time gap = 0.267521 s
-5. 0.125s
-6. The difference is 0.142521 s. Reasons for this may be:
-* Transmission delay at all nodes has been neglected while calculating RTT
-* Queuing and processing delays at intermediate nodes has also not been considered
-1. 0.000026 s. This accounts for computer’s processing time for the packet reply and the system bus transfer time for the packet.
-2. Initial packet: packet number--145    time = 3.045697s
-Relative time from connection request initiation =  3.045697 - 2.50915 s = 0.536547 s
-1. Final packet: packet number--1358        time =  11.743801s
-        Delay = 11.743801 - 3.045697= 8.698104s
-1. Content-Length: 902723 bytes (obtained from packet no. 1358)
-2. 902723 * 8 / 8.698104 = 830271.05 bps = 0.83 Mbps
-3. 11.743801 -  2.50915 = 9.234651 s
-4. 902723 * 8 / 9.234651 = 0.782 Mbps
-5. Effective data rate is smaller than the download data rate since we are considering a non-zero time for establishing connection to the server also.
-6. The connection is closed at packet number 1414 (after FIN and ACK bit set packets have been exchanged). The relative timestamp for this packet is 12.011481s.
-Thus, total connection interval = 12.011481 - 2.50915 s = 9.502331s    
+1. ~/ns-3.27/examples/wireless/wifi-simple-infra.cc which is copied to ~/ns-3.27/scratch
 
-
-FOR LOCAL TRACE :
-1. 10.129.5.166
-2. HTTP
-3. a) 2.044752s b) 2.045289s    c) 2.045317s
-4.    Time gap = 0.000537 s
-5. [neglecting this delay]
-6. The difference is 0.000537 s. Reasons for this may be:
-* Transmission delay at all nodes has been neglected while calculating RTT
-* Queuing and processing delays at intermediate nodes has also not been considered
-1. 0.000028s . This accounts for computer’s processing time for the packet reply and the system bus transfer time for the packet.
-2. Initial packet: packet number--234  time = 2.045932s
-Relative time from connection request initiation =  2.045932 - 2.044752  s = 0.00118s
-1. Final packet: packet number--897        time =  2.126283s
-        Delay = 2.126283 - 2.045932 = 0.080351s
-1. Content-Length: 902723 bytes (obtained from packet no. 897)
-2. 902723 * 8 / 0.080351  = 89877960 bps = 89.87 Mbps
-3. 2.126283 - 2.044752 = 0.081531 s
-4. 902723 * 8 / 0.081531 = 88.57 Mbps
-5. Effective data rate is smaller than the download data rate since we are considering a non-zero time for establishing connection to the server also.
-6. The connection is closed at packet number 901 (after FIN and ACK bit set packets have been exchanged). The relative timestamp for this packet is 2.127352 s.
-Thus, total connection interval = 2.127352 - 2.044752s = 0.0826 s    
+2. 
 
 
 Exercise 2
 --------------
-1. Delays were larger in the case of retrieving file from remote server as compared to the local one. This may be due to higher propagation delay due to longer distance, more transmission and queuing delay due to larger number of intermediate nodes/hops etc.
-2. Data rate was much higher in case of local server than remote server, which is evident from the lower delay for that case.
+
