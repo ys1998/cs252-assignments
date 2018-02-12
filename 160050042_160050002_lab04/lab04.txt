@@ -5,7 +5,9 @@ Exercise 1
 --------------
 1. ~/ns-3.27/examples/wireless/wifi-simple-infra.cc which is copied to ~/ns-3.27/scratch
 
-2. 
+2.      wifi-simple-infra-0-0.pcap
+	wifi-simple-infra-1-0.pcap
+
 
 
 Exercise 2
