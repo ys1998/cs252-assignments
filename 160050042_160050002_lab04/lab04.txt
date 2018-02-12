@@ -3,19 +3,41 @@
 
 Exercise 1
 --------------
-1. ~/ns-3.27/examples/wireless/wifi-simple-infra.cc which is copied to ~/ns-3.27/scratch
+1. 	~/ns-3.27/examples/wireless/wifi-simple-infra.cc which is copied to ~/ns-3.27/scratch
 
 2.      wifi-simple-infra-0-0.pcap
 	wifi-simple-infra-1-0.pcap
 
-*3. Beacon frame & payload frame
+*3. 	Beacon frame & payload frame
 
 4.	./waf --run "wifi-simple-infra --rss=-97 --numPackets=20 --verbose=true"
 
 Exercise 2
 --------------
+1.	Direction : Packets are being transmitted from STA0 (IP address 10.0.0.2) to AP (IP address 10.0.0.1). It is easy to determine from the code since the base address is first assigned to 10.0.0.0 and then IPs for AP and STA0 are assigned subsequently (because of which they are assigned IPs 10.0.0.1 and 10.0.0.2 respectively). The source and destination addresses from the .pcap file match these values, with the source as STA0 and destination as AP.
+	Rate : From the code, application layer data rate should be 100 Mbps; from the .pcap file, physical layer data rate was found to be 65 Mbps. 
+	Packet size : The payload size is found to be 1472 bytes in both the code and .pcap file. The frame size in .pcap file was found to be 1574 bytes.
+	
+2.	The throughput mentioned in the output file is ~59 Mbps (values for the simulations are 54.8408, 59.5395, 59.5512, 59.563 and 59.4924 Mbps).
 
+3.	Payload (wrt Application layer) = 1472 bytes
+	Time taken for tranmitting packets (obtained from timestamps of successive packets) = 190 microseconds
+	Effective data rate for Application layer = 1472*8/190 Mbps = 61.97 Mbps
 
+4.	PHY layer data rate is 65 Mbps.
+
+5.	Data size = 1472 bytes
+	UDP header = 8 bytes
+	IP header = 20 bytes
+	802.11 MAC header = 34 bytes
+	Total data size = 1534 bytes
+	PHY layer header = 20 microseconds
+	PHY layer data rate (HTMCS7 standard) = 65 Mbps
+	Effective throughput = 1534*8/(1534*8/65 + 20) Mbps = 58.77 Mbps
+
+	This matches the obtained values. (~59 Mbps)
+
+6.	
 
 
 
