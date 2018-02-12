@@ -8,7 +8,7 @@ Exercise 1
 2.      wifi-simple-infra-0-0.pcap
 	wifi-simple-infra-1-0.pcap
 
-*3. 	Beacon frame & payload frame
+3. 	Beacon frame & payload frame
 
 4.	./waf --run "wifi-simple-infra --rss=-97 --numPackets=20 --verbose=true"
 
@@ -41,9 +41,31 @@ Exercise 2
 
 Exercise 3
 --------------
+1. As per TA, kept data-rate = 10 Mbps
+
+In initial stage, the throughput increases with increase in client due to link layer speed as 60 Mbps while datarate at 10Mbps.
+
+Now after a moment, then the graph dips fastly in the begining and then the throughput keeps on decreasing.
+
+Within the limited resources available, we searched upto 100 nodes and the throughput kept on decreasing.
+
+2. Fairness decreases with increase in the number of nodes. This is a constantly decreasing graph within marginal error at some instances as fluctuation but at rest the garph remains a decreasing graph.
+
+3. In general we assumed that for 10 second interval, we calculated the per-sec Jain fairness averaged out over all the seconds.
+
+This will remain quite same to the original 1-sec value but with a very little fluctuation and remains a costantly decreasing graph.
 
 
 Exercise 4
 --------------
-1.	
-* need to recheck
+1. Taken the data-rate as 10Mbps according to announcement, in the begining the %tage error was zero for one client and then increases for 2 client. After that there was a decrease in the amount of collision for a given station taken as station 1 in our case due to number of total packet transmitted beign increasing.
+
+But after then, when we reach the total capacity of physical link, then mostly the percentage error keep increasing after that limit within the marginal error of variation possible. But mainly it increases with increase in n.
+
+2. For N as  1 , the graph of distribution is more concentrated at smaller values.
+
+In a mid value, the graph had some high values too with low probability, but mainly still the value was concentrated at a point with higher probability.
+
+In largest value, There was a relatively larger spread in the inter-arrival time and the peak was the at largest time innterval among all 3 also the maximum value attend was pretty high.
+
+
