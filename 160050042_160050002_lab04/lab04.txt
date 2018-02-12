@@ -10,6 +10,8 @@ Exercise 1
 
 *3. Beacon frame & payload frame
 
+4.	./waf --run "wifi-simple-infra --rss=-97 --numPackets=20 --verbose=true"
+
 Exercise 2
 --------------
 
