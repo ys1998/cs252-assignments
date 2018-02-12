@@ -8,8 +8,15 @@ Exercise 1
 2.      wifi-simple-infra-0-0.pcap
 	wifi-simple-infra-1-0.pcap
 
-
+*3. Beacon frame & payload frame
 
 Exercise 2
 --------------
 
+
+
+
+
+
+
+* need to recheck
