@@ -21,7 +21,7 @@ Exercise 2
 2.	The throughput mentioned in the output file is ~59 Mbps (values for the simulations are 54.8408, 59.5395, 59.5512, 59.563 and 59.4924 Mbps).
 
 3.	Payload (wrt Application layer) = 1472 bytes
-	Time taken for tranmitting packets (obtained from timestamps of successive packets) = 190 microseconds
+	Time taken for transmitting a packet (obtained from timestamps of successive packets) = 190 microseconds
 	Effective data rate for Application layer = 1472*8/190 Mbps = 61.97 Mbps
 
 4.	PHY layer data rate is 65 Mbps.
@@ -37,10 +37,10 @@ Exercise 2
 
 	This matches the obtained values. (~59 Mbps)
 
-6.	
+6.	Real time = 10.783s; This difference arises because some time is required to get things up and running, and initiate the simulations.
 
-
-
+Exercise 3
+--------------
 
 
 * need to recheck
