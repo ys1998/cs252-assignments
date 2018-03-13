@@ -1,0 +1,165 @@
+[LAB 6]
+[Rupesh 160050042] [Yash Shah 160050002]
+
+NOTE:
+- flag-trace1.pcap and flag-trace2.pcap were generated on same PC while dhcp-trace1.pcap was generated on another PC.
+
+Installing Linux as a Virtual Machine [1+1=2 marks]
+===================================================
+Install VirtualBox on your laptop which may be running Mac or Windows or Linux
+Which version of VirtualBox did you install? 
+
+Answer Given:
+
+Oracle VM VirtualBox version 5.2.8
+
+Install Linux version Ubuntu 16.04 (or any version of Linux really) as a guest OS on VirtualBox
+Which version of Linux did you install as guest OS? 
+
+Answer Given:
+
+Ubuntu 16.04
+
+Understanding IP Configuration of a Linux Machine [6 marks]
+===========================================================
+Find out the IP address of the Linux guest and its netmask using the ifconfig command 
+
+Answer Given:
+
+IPv4 address : 10.0.2.15 Netmask : 255.255.255.0
+
+IPv6 address : fe80::70eb:1aba:eaf:76df/64
+
+ 
+
+Find out the IP address of the (Linux) host and its netmask using the ifconfig command 
+
+Answer Given:
+
+ipv4 address:192.168.42.98   Mask:255.255.255.0
+ipv6: fe80::a68c:31fc:9602:7b60/64
+
+Are the guest and host in the same subnet? 
+
+Answer Given:
+
+NO
+
+The default configuration of the Linux guest is to use DHCP; check that this is indeed the case (on the guest or host).  See the “Edit Connections” option toward the top right corner. Describe your process of checking in one sentence. 
+
+Answer Given:
+
+In Edit connection:
+
+Wired connection 1 -> ipv4 setting -> Automatic (DHCP)
+
+The DHCP client (on the guest or host) runs as a user-level process called dhclient.  Find its process-ID by using the command:
+ps ax | grep dhclient 
+
+Answer Given:
+
+Process-ID of dhclient is 838
+
+ 
+
+"
+
+  838 ?        S      0:00 /sbin/dhclient -d -q -sf /usr/lib/NetworkManager/nm-dhcp-helper -pf /var/run/dhclient-enp0s3.pid -lf /var/lib/NetworkManager/dhclient-d2e68eaa-0bb1-3c71-b7bc-981520779fa9-enp0s3.lease -cf /var/lib/NetworkManager/dhclient-enp0s3.conf enp0s3
+
+ 
+
+"
+
+Find the IP address of the default gateway/router of the Linux guest using the command:
+route -n 
+
+Answer Given:
+
+10.0.2.2
+
+Manual IP configuration of a Linux machine from the command-line [2 marks]
+==========================================================================
+For the questions below, disable the auto-configuration in the ubuntu guest by selecting “Disconnect” in the top-right side menu
+
+Assign an IP address in the same subnet as earlier, by using the command (you may have to replace eth0 below with the correct interface name):
+sudo ifconfig eth0 <IP-addr> netmask <same-as-earlier> 
+
+Answer Given:
+
+sudo ifconfig enp0s3 10.0.2.14 netmask 255.255.255.0
+
+Are you able to “ping <host-IP-addr>” ?  Likely not.  You should configure the default router/gateway entry in the forwarding table for this:
+sudo route add default gw <same-gateway-as-earlier>
+Does the ping work now? 
+
+Answer Given:
+
+In the beginning, the ping command did not work and gave an error "Network is unreachable". After configuring the default router/gateway entry in the forwarding table using
+
+sudo route add default gw 10.0.2.2
+
+the ping command started working.
+
+DHCP operation [1+3 = 4 marks]
+==============================
+For the questions below, disable the auto-configuration in the ubuntu guest by selecting “Disconnect” in the top-right side menu
+
+In the guest Linux, open a terminal and run the command (replace eth0 with appropriate interface name):
+sudo tcpdump -w dhcp-trace1.pcap -i eth0
+Now open another terminal and run “dhclient eth0”
+After you have successfully obtained an IP address, you can stop the tcpdump by pressing “Ctrl-C”. 
+
+Answer Given:
+
+We ran these commands
+
+Terminal 1:
+
+sudo tcpdump -w dhcp-trace1.pcap -i enp0s3
+
+Terminal 2:
+
+sudo dhcpclient enp0s3
+
+Observe the various DHCP messages in tcpdump.  Explain your observations based on your understanding of DHCP. 
+
+Answer Given:
+
+Initially the guest hasn't been assigned any IP address (value 0.0.0.0). It first broadcasts (i.e. on 255.255.255.255) a packet to discover the DHCP server, which responds via the default gateway 10.0.2.2 (for our setup) offering it the IP address 10.0.2.15. The guest then requests for the same IP address using a broadcast message (i.e. to IP address 255.255.255.255) with a "Requested IP Address" field set to "10.0.2.15". The DHCP server responds with an ACK, thereby confirming the requested IP address.
+
+IP Header Format, IP Fragmentation [1+1+2+2=6 marks]
+====================================================
+Compile the given sendUDP.c using the command:
+gcc -o sendUDP sendUDP.c
+Learn the usage of the sendUDP program by running it without any arguments.  What are its arguments?  (You do not need to know/understand the contents of sendUDP.c to answer this). 
+
+Answer Given:
+
+There are two arguments to the program:
+
+remote-host : IP address (or domain name, for which IP is fetched from DNS) of the node to which packet is to be sent
+
+pkt-size : size of the packet to be sent (max size is 4096 bytes)
+
+What is the MTU of your default ethernet/WiFi interface?  Find this out using the ifconfig command. 
+
+Answer Given:
+
+MTU is 1500 bytes (obtained by running 'ifconfig' and looking at the 'mtu' field)
+
+Run tcpdump from a terminal:
+sudo tcpdump -i eth0 -w frag-trace1.pcap
+From another terminal run sendUDP with appropriate arguments so that there is NO fragmentation.  Note down your observations. 
+
+Answer Given:
+
+We sent a packet with payload length 1200 bytes (MTU was 1500 bytes there was no fragmentation, since the packet size was 1228 bytes in total as mentioned in IPv4 header). This packet had "Don't fragment" bit set to 1 and "More fragments" bit set to 0. The offset value was 0 (not relevant here).
+
+Change the MTU of your default ethernet/WiFi interface by running:
+sudo ifconfig eth0 MTU <newMTU>
+Set the new MTU to say 296.
+Now repeat exercise-3 above capturing frag-trace2.pcap and creating a situation with as well as without fragmentation.  Note down your observations. 
+
+Answer Given:
+
+We used MTU as 296 bytes (the max payload length was 272 bytes, and there was 20 bytes header - so the size of each packet was 292 bytes). There were a total of 5 packets (4 packets with "More fragments" bit set to 1, and the last with that bit set to 0). All of them had "Don't fragment" bit set to 0. The offset values of the packets were 0, 272, 544, 816, 1088 respectively.
