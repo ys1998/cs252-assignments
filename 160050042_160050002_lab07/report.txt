@@ -1,0 +1,244 @@
+LAB 7
+Roll no : 160050042, 160050002
+
+Address Resolution Protocol (ARP) and ICMP [1 x 12 = 12 marks]
+=============================================================
+For the exercises below you can use either a Linux laptop or a Linux VM guest.  For each, you will likely need to run wireshark or tcpdump to observe messages which are going on the network interface.  You may also need to use the sendUDP program.
+
+Note the IP address of your default network interface (WiFi or Ethernet, called wlan0 henceforth; replace as appropriate) which is active.  Use sendUDP to that IP address while running tcpdump. 
+
+Answer Given:
+
+IP address =
+
+10.196.14.157 (wlp2s0)
+
+127.0.0.1 (lo)
+
+Netmask = 255.255.224.0
+
+So, the IP addresses in the same subnet vary from 10.196.0.0 to 10.196.31.254 (10.196.31.255 is the broadcast IP address)
+
+What ARP message(s) is/are generated on wlan0 or lo? 
+
+Answer Given:
+
+No ARP messages are generated in this case.
+
+What ICMP message(s) is/are generated on wlan0 or lo? 
+
+Answer Given:
+
+No ICMP messages are generated.
+
+Now use sendUDP to another non-existent IP address on the same subnet as wlan0.  Next use sendUDP to another existent IP address on the same subnet as wlan0.  The other existent IP address could be the default router, or your friend’s laptop’s wlan0 IP address.  You may have to guess a non-existent IP address, and conclude that it is indeed non-existent based on ARP/ICMP traffic you see (or fail to see) while running tcpdump. 
+
+Answer Given:
+
+Existent IP address = 10.196.21.128 (friend's IP address)
+
+Non-existent IP address = 10.196.14.122
+
+The non-existent IP address was determined by executing the ping 10.196.14.122 command and getting 'Destination Host Unreachable'.
+
+ 
+
+What ARP message(s) is/are generated on wlan0 when using sendUDP to an existent IP address? 
+
+Answer Given:
+
+Two ARP messages were generated: an ARP request (source = 10.196.14.157 and broadcast to all hosts in the subnet) and an ARP response (source = 10.196.21.128, source MAC address = b8:81:98:3a:d1:80, destination = 10.196.14.157).
+
+What ICMP message(s) is/are generated on wlan0 when using sendUDP to an existent IP address? 
+
+Answer Given:
+
+The sendUDP.c script sent packets to destination port 2000. Since that port wasn't reachable for IP address = 10.196.21.218, the following ICMP message was generated:
+
+no      time             source                destination      protocol  length   INFO
+
+172    1.456155    10.196.21.128    10.196.14.157    ICMP    590    Destination unreachable (Port unreachable)
+
+ 
+
+What ARP message(s) is/are generated on wlan0 when using sendUDP to a non-existent IP address? 
+
+Answer Given:
+
+ARP requests were generated at roughly 1 second intervals, requesting for the MAC address for 10.196.14.122. No ARP reply packet was obtained (within 10 second interval).
+
+What ICMP message(s) is/are generated on wlan0 when using sendUDP to a non-existent IP address? 
+
+Answer Given:
+
+Since no UDP packet was sent to the non-existent IP (we verified this by searching for UDP packets with length >= packet_size in wireshark), no ICMP message was generated.
+
+How exactly did you conclude that the non-existent IP address is indeed non-existent? 
+
+Answer Given:
+
+The non-existent IP address was determined by executing the ping 10.196.14.122 command and getting 'Destination Host Unreachable'. Moreover, there was no reply for the ARP request during an interval of 10 seconds.
+
+Using the Linux “arp” command, observe the kernel’s ARP cache before and after using sendUDP, for the existent IP address.  Note that you can delete an existent arp entry by using the “-d” flag of the “arp” command. 
+
+Answer Given:
+
+We first cleared the arp cache using the ip -s -s neigh flush all command in order to exactly observe the changes introduced by sendUDP.c.
+
+The final ARP table looked as follows:
+
+ _gateway (10.196.0.2) at 00:04:96:83:a0:8e [ether] on wlp2s0
+? (10.196.21.128) at b8:81:98:3a:d1:80 [ether] on wlp2s0
+
+Now use sendUDP to an existent IP address outside the subnet. 
+
+Answer Given:
+
+IP address external to subnet = 10.129.3.3
+
+What ARP message(s) is/are seen on wlan0?  Explain. 
+
+Answer Given:
+
+No ARP addresses were observed. This is because the hosts were not in the same subnet, and so the packet was simply sent outside the subnet via the gateway (i.e. there was no need to find the MAC address of the destination, and so the packet was forwarded).
+
+(we didn't get the ARP message corresponding to the default router since the _gateway entry was already present in our routing table)
+
+What ICMP message(s) is/are seen on wlan0?  Explain. 
+
+Answer Given:
+
+The sendUDP.c script sent packets to destination port 2000. Since that port wasn't reachable for IP address = 10.129.3.3 (cse.iitb.ac.in), the following ICMP message was generated:
+
+no      time             source           destination      protocol  length   INFO
+
+304    3.372072    10.129.3.3    10.196.14.157    ICMP    590    Destination unreachable (Port unreachable)
+
+Now use sendUDP to a non-existent IP address outside the subnet (you can just use a random private IP address which is NOT the same subnet as your wlan0). 
+
+Answer Given:
+
+Non-existent IP address external to subnet = 10.196.32.25
+
+(the fact that the IP is non-existent was determined by executing the ping 10.196.32.25 command and getting 'Destination Host Unreachable'.
+
+What ARP message(s) is/are seen on wlan0?  Explain. 
+
+Answer Given:
+
+Again, no ARP messages were observed (as in Q3 part 1).
+
+What ICMP message(s) is/are seen on wlan0?  Explain. 
+
+Answer Given:
+
+We got two ICMP messages, as shown:
+
+no      time             source           destination      protocol  length   INFO
+
+138    1.536083    10.196.0.2    10.196.14.157    ICMP    590    Redirect             (Redirect for host)
+
+541    6.145107    10.196.0.2    10.196.14.157    ICMP    590    Destination unreachable (Host unreachable)
+
+Here, 10.196.0.2 is the IP address of the default gateway. The first ICMP message indicates that an intermediate router forwarded the packet to another router (and therefore sent an ICMP redirect message to the original source). The second ICMP message indicates that the destination IP address was unreachable (which is because that IP address is non-existent).
+
+The ping and traceroute tools [1+1+1+3 = 6 marks]
+=================================================
+
+For each of the questions below, you can use a Linux laptop.  You may have to run tcpdump on the default active ethernet/wireless interface (called wlan0 henceforth) to observe the traffic on the network interface.
+
+Use ping on any existent IP address in the same subnet as wlan0.  Observe and explain the ICMP traffic. 
+
+Answer Given:
+
+Use ping on any existent IP address outside the subnet.  Observe and explain the ICMP traffic. 
+
+Answer Given:
+
+Source IP address = 192.168.42.36
+
+Destination IP address = 10.129.3.3
+
+For every ping request (which is an ICMP message of type 8 from source IP to destination IP), we got a ping response (which is an ICMP message of type 0, from destination IP to source IP). Ping requests were sent at 1 second intervals.
+
+Use ping on any non-existent IP address outside the subnet.  Observe and explain the ICMP traffic. 
+
+Answer Given:
+
+Source IP address = 192.168.42.36
+
+Destination IP address = 10.129.32.25
+
+After every 5 ping requests (ICMP message of type 8 which were generated at 1 second intervals), we got a 'Destination unreachable' ICMP message (type 3, code 1). The response ICMP packet was wrapped around our actual packet (i.e. ICMP headers wrapped around our ping request packet)
+
+Use traceroute on any existent IP address outside the subnet.  Observe and explain the packets seen on the network interface.  Also record the traceroute output and explain the same. 
+
+Answer Given:
+
+Source IP : 10.196.14.157
+
+Destination IP : 10.129.3.3
+
+Packets observed :
+
+Three UDP packets each were generated for TTL values 1,2,3 and so on. As soon as they expired at a router, an ICMP message (type 11) was sent to the source IP (10.196.14.157) by that router. Thus, the expected order of ICMP messages (type 11), according to their source IPs was 10.196.0.2, 10.250.129.2 and finally 10.129.3.3 (the last ICMP message, from 10.129.3.3 was a 'Port unreachable' ICMP message of type 3 and code 3). However, this order was not maintained due to differing priorities given to ICMP messages by different routers.
+
+Traceroute output :
+
+traceroute to 10.129.3.3 (10.129.3.3), 30 hops max, 60 byte packets
+ 1  _gateway (10.196.0.2)  2.473 ms  2.950 ms  3.546 ms
+ 2  10.250.129.2 (10.250.129.2)  4.783 ms  5.591 ms  5.725 ms
+ 3  cse.iitb.ac.in (10.129.3.3)  5.512 ms  5.807 ms  5.908 ms
+
+On receiving the three ICMP packets for each TTL value, the application knew which routers were at hop count 1,2,3 etc from the TTL values of UDP packets wrapped inside the ICMP packets. Once this was known, creation of this table was trivial.
+ 
+
+NAT routing [1+3+8=12 marks]
+============================
+
+For the exercises in this part, you need to use the Linux guest VM as well as the Linux/Windows/Mac host.  You may need to run tcpdump on the appropriate interfaces on the guest as well as host.  To generate traffic, you will be using the wget command as follows:
+
+wget http://www.cse.iitb.ac.in/~br/temp/networks-lab.txt
+
+To ensure that your traces are manageable and without clutter, you may want to close browser windows and other apps on your machine which may be generating network traffic.
+
+From within the Linux guest, run wget to successfully download the networks-lab.txt webpage as above. 
+
+Answer Given:
+
+What is the IP address of the web server?  You can observe this from the traces at the guest or the host. 
+
+Answer Given:
+
+IP address = 10.129.3.3
+
+ 
+
+By comparing the traces collected at the host and the guest, observe the port mapping which is happening. 
+
+Answer Given:
+
+While making http request, port 45150 of Linux guest was mapped to 39558 of Linux host and a request was made to port 80 of 10.129.3.3, and the source IP (10.0.2.15) was replaced by the host's IP (192.168.42.36). Since 10.129.3.3 asked for https requests, further communication took place via port 443 of 10.129.3.3.
+
+Due to this, https messages were sent through port 38756 of Linux guest (which was mapped to 33434 by NAT server after replacing IP address) to port 443 of 10.129.3.3.
+
+Now open two different terminals in the Linux guest and keep the following command ready in each:
+wget http://www.cse.iitb.ac.in/~br/temp/tmote-tools-2_0_4.zip 
+
+Note that the above file is a large file.  This is intentional, to trigger two simultaneous downloads.  Now as close in time as possible, press “enter” on both commands.  You can hit Ctrl-C on both after a few seconds; no need for either download to complete. 
+
+Answer Given:
+
+Observe the traces at the guest as well as at the host.  Find the relevant NAT mappings for both the downloads. 
+
+Answer Given:
+
+Linux guest IP = 10.0.2.15
+
+Linux host IP = 192.168.42.36
+
+When we ran the wget command with https url, it first used port 38850 in the Linux guest and made a request to port 443 of 10.129.3.3. When this request passed through NAT router, it allocated port 33550 for port 38850 of Linux guest and replaced the source IP address with its own IP (10.0.2.15 was replaced by 192.168.42.36). After this, the TCP segments started exchanging.
+
+When same command was run on second terminal on Linux guest, it used port 38852 and made a request to port 443 of 10.129.3.3. When this request passed through NAT router, it allocated port 33552 for port 38852 of Linux guest and replaced the source IP address with its own IP (10.0.2.15 was replaced by 192.168.42.36). After this, TCP segments started exchanging.
+
+
