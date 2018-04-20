@@ -1,0 +1,154 @@
+TCP Analysis using NS3
+======================
+Rupesh (160050042), Yash Shah (160050002)
+=========================================
+
+Getting warmed up: TCP Tahoe in ns3 [1+1+2+2 = 6 marks]
+=======================================================
+You will be using ns3.23 for this lab.  Download and compile ns3.23 (you are given an almost ready tgz in BodhiTree).  Run “./waf –configure” from within the ns-3.23 directory.  From lab08.tgz, place the file tcp-variants-comparison.cc in ns-3.23/scratch.  Take a look at the various parameters and network topology configuration in the main() code. Then you can run:
+
+./waf --run "tcp-variants-comparison --transport_prot=TcpTahoe"
+
+There are various output files generated as you can see.
+
+By looking at the code or at the “trace” output file, find out the network topology.  From the code, also find the bottleneck bandwidth in the topology. 
+
+Answer Given:
+
+The network consists of four nodes (nodes 2, 0, 1, 3). The order in which data is transferred is
+
+Node 2 -> Node 0 -> Node 1 -> Node 3
+
+The bottleneck link has 1Mbps bandwidth and is between nodes 0 and 1.
+
+From the last “ACK” in the trace file, find the number of bytes transferred successfully to the receiver in the simulation duration.  Compute the average throughput and compare it to the bottleneck bandwidth of the topology. 
+
+Answer Given:
+
+The Ack field of the last ACK is 867961, which implies that 867960 bytes were transferred successfully.
+
+The time required for the same was 10.0097 - 0.01 = 9.9997 seconds (start time was obtained from code)
+
+Average throughput = 867960/9.9997 bytes/second = 694.4 Kbps = 0.69 Mbps
+
+Clearly, it is much smaller than the bottleneck bandwidth, which was 1 Mbps.
+
+An important part of understanding TCP dynamics is the plot of cwnd versus time.  Using the “cwnd-trace” file, plot a graph of the cwnd against time; submit this as a file named “cwnd-tahoe.pdf”.  You are given the pyplot file cwnd-plot.py to help you with this.  Explain the shape of the graph: identify slow-start, timeout, congestion-avoidance phases. 
+
+Answer Given:
+
+The different regions are as follows:
+
+Slow start phase : 0-2 seconds and 2-4 seconds (exponential increase in cwnd)
+
+Timout occurs at roughly 2 seconds.
+
+Congestion avoidance phase : from around 4 seconds to 10 seconds (linear increase in cwnd)
+
+Another important plot in understanding TCP is the growth of the sequence number with time.  Plot a graph of the seqNum sent (NOT received) versus time, using the relevant fields from the “trace” file.  Submit this as file named “seqnum-tahoe.pdf”.  It will be best if you write a script (using python/bash/awk) to extract the relevant fields of the trace file, as you will need similar scripts for further exercises. 
+
+Answer Given:
+
+To identify sent packets, we extracted those packets for which Ack=1 and were corresponding to NodeList/2.
+
+Comparing TCP variants [2+2 = 4 marks]
+Run a simulation similar to the above for TcpReno and TcpNewReno.  Be sure to save the trace files in a relevant sub-directory, so that the simulator does not overwrite the relevant trace files.
+
+Plot a single graph, with 3 plot lines, one each for Tahoe, Reno, NewReno.  The graph should compare the cwnd-vs-time for each of the three variants.  Comment on the shape of each line and also compare across the three.  Submit the graph as cwnd-comparison.pdf 
+
+Answer Given:
+
+Tahoe - The graph increases exponentially in the beginning and drops to zero at timeout. It again starts increasing in a similar manner, and then increases linearly on detecting congestion.
+
+Reno - It behaves similar to Tahoe, but after packet loss cwnd drops to half the prev value instead of one. It increases again when it receives duplicate ACKs, after which it drops and waits till timeout occurs. During this phase, cwnd remains constant; after which it becomes 1 again (i.e. slow-start is used). During the congestion avoidance phase, cwnd increases linearly with time.
+
+NewReno - It behaves similar to Reno until packet loss occurs. It then maintains a much higher cwnd, by linearly increasing/decreasing cwnd as per the protocol.
+
+In general, NewReno behaves best and in this particular case, Reno behaved poorly as compared to Tahoe (although not true in general).
+
+Likewise, compare the seqnum sent vs time across the 3 variants.  Submit the graph as seqnum-comparison.pdf 
+
+Answer Given:
+
+The sequence numbers in case of Tahoe and Reno increase at a much faster rate as compared to NewReno. Reno has lower sequence number than Tahoe in this case due to the lower value of cwnd at the corresponding time - due to this lower cwnd value, Reno isn't able to send data as fast as Tahoe, hence its sequence number lags behind that of Tahoe at any given time. NewReno maintains a high value of cwnd and still manages to use less sequence numbers - this might be due to a clever implementation, the details of which are unknown to us currently.
+
+TCPTahoe performance under packet loss [1+1+3=5 marks]
+======================================================
+Aside from buffer overflow losses, some links, especially wireless links, can have channel error related losses.  Technologies such as WiFi have link layer retransmissions, but some losses can show at the TCP layer despite this.  TCPTahoe does not behave very well under such non-congestion losses, as you will discover now.
+
+Run:
+./waf --run "tcp-variants-comparison –transport_prot=TcpTahoe --error_p=0.01" 
+
+This simulates a 1% loss on the bottleneck link.  Compute the average throughput achieved.  Compare this with the earlier throughput under no loss.  Is the throughput loss just 1% or much higher? 
+
+Answer Given:
+
+The Ack field of the last ACK is 203041, which implies that 203040 bytes were transferred successfully.
+
+The time required for the same was 10.0036 - 0.01 = 9.9936 seconds (start time was obtained from code)
+
+Average throughput = 203040/9.9936 bytes/second = 162.5 Kbps = 0.16 Mbps
+
+Now, it is never good to run a probabilistic simulation just once.  To run the simulator with a different random loss pattern (but still 1% average loss rate), use:
+./waf --run "tcp-variants-comparison –transport_prot=TcpTahoe --error_p=0.01 --run=0"
+./waf --run "tcp-variants-comparison –transport_prot=TcpTahoe --error_p=0.01 --run=1"
+./waf --run "tcp-variants-comparison –transport_prot=TcpTahoe --error_p=0.01 --run=2"
+Is the throughput achieved the same in the three cases?  Compute and report the average as well as the standard deviation of the throughput, across the 3 runs. 
+
+Answer Given:
+
+Average throughput in :
+
+Run 0 -> 203040/10 = 20304 bytes/sec = 162.4 Kbps
+
+Run 1 -> 323640/10 = 32364 bytes/sec = 258.9 Kbps
+
+Run 2 -> 200160/10 = 20016 bytes/sec = 160.1 Kbps
+
+Throughput is different for all three cases. 
+
+Average -> 193.8 Kbps
+
+Std. -> 46.04 Kbps
+
+Now, run the simulator thrice each, for loss rates of 1%, 2%, 4%, 7%, 10% (total of 15 runs).  (Now you’ll realize the value of automation and scripting!)  Plot a graph of the average throughput (average across 3 runs in each case) against the loss rate on the x-axis.  Submit this as throughput-vs-loss-tahoe.pdf.  Submit also the relevant graph plotting script(s).  Explain the shape of the graph. 
+
+Answer Given:
+
+The average values were calculated manually (they are mentioned in q3_3.py script).
+
+The graph is decreasing in nature. This can be explained as follows : as the error rate increases, the probability of a timeout increases (due to increase in probability of loss of packet). Due to this, the average throughput would decrease since Tahoe will use slow-start after each timeout, leading to lower utilization.
+
+TCP fairness study [2+3 = 5 marks]
+==================================
+For this study, you will use an induced error rate of 1%.  TCP is supposed to give a fair share of the bottleneck bandwidth to the N flows sharing it.  Does it do a good job of this?  Lets find out.  So far you have simulated with num_flows=1 (the default in the code).  You can run:
+
+./waf --run "tcp-variants-comparison –transport_prot=TcpTahoe --error_p=0.01 --run=0 --num_flows=2"
+
+This will change the number of flows across the bottleneck link.
+
+For num_flows=2, compute the throughput for each flow.  Are they sharing the bandwidth equally?  Compute the Jain fairness index and comment on its value.  (See wikipedia if you’ve forgotten what the Jain fairness index is). 
+
+Answer Given:
+
+flow generated by 10.0.2.1 taken time duration as 10 and ack received being 114841 i.e. 114840 bytes received turns out to be 91.87 Kbps
+
+Flow 2 generate by 10.0.4.1 is of throughput 256.03 Kbps. (ACK 320041)
+
+No, the bandwidth is not shared equally.
+
+Jain Fairness index is 0.82.
+
+This value is fairly low because one of the sender is getting low bandwidth.
+
+
+Run the simulator for num_flows ranging from 2 to 10 in steps of 2.  In each case, compute the Jain fairness index.  Plot a graph of the fairness index on the y-axis against num_flows on the x-axis.  Comment on the shape of the graph.  Submit the graph as file fairness-vs-numflows.pdf 
+
+Answer Given:
+
+Throughout the number of flows varying from 2 to 10, the value of JFI remains above 0.82 and this shows the protocol of TCP trying to maintain equality across all flows.
+
+Also as number of nodes increases, Fairness index increases as more flow is participating and JFI is average of bottleneck distribution. 
+
+In case of flow number 8, there might case where some node got struck in a bad state where it has to face higher number of timeout and hence the net flow for those nodes turn out to be low. A more better approach to see JFI vs number of node is also to run the flow simulation for larger number of times and then average the JFI obtained.
+
